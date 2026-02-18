@@ -1,0 +1,25 @@
+# Node
+node_modules/
+dist/
+
+# Java / Maven
+target/
+*.jar
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Zip archives
+*.zip

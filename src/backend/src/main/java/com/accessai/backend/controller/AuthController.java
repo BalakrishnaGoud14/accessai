@@ -28,6 +28,10 @@ public class AuthController {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setJoinedDate(LocalDate.now().toString());
+        // Default department if not provided
+        if (user.getDepartment() == null || user.getDepartment().isBlank()) {
+            user.setDepartment("General");
+        }
         // Default role if not provided
         if (user.getRole() == null) {
             user.setRole(User.Role.EMPLOYEE);
@@ -44,17 +48,16 @@ public class AuthController {
         Optional<User> userOpt = userRepository.findByEmail(email);
         if (userOpt.isPresent() && passwordEncoder.matches(password, userOpt.get().getPassword())) {
             User user = userOpt.get();
-            // In a real app, return JWT here. For now, returning user details (excluding password)
+            // In a real app, return JWT here. For now, returning user details (excluding
+            // password)
             return Map.of(
-                "success", true,
-                "user", Map.of(
-                    "id", user.getId(),
-                    "name", user.getName(),
-                    "email", user.getEmail(),
-                    "role", user.getRole(),
-                    "department", user.getDepartment()
-                )
-            );
+                    "success", true,
+                    "user", Map.of(
+                            "id", user.getId(),
+                            "name", user.getName(),
+                            "email", user.getEmail(),
+                            "role", user.getRole(),
+                            "department", user.getDepartment()));
         }
         return Map.of("success", false, "error", "Invalid credentials");
     }

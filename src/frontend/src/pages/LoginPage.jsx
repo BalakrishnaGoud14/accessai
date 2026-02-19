@@ -34,9 +34,9 @@ export default function LoginPage() {
     setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = login(formData.email, formData.password);
+    const result = await login(formData.email, formData.password);
     if (result.success) {
       navigate("/select-role");
     } else {

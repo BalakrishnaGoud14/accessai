@@ -36,7 +36,7 @@ export default function RegisterPage() {
     setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -49,7 +49,7 @@ export default function RegisterPage() {
       return;
     }
 
-    const result = register(formData.name, formData.email, formData.password);
+    const result = await register(formData.name, formData.email, formData.password);
     if (result.success) {
       navigate("/select-role");
     } else {

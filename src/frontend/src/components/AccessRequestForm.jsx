@@ -1,6 +1,6 @@
-import React from "react";
-// src/components/AccessRequestForm.jsx
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import { api } from "../services/api";
 import {
   Box,
   TextField,
@@ -20,29 +20,48 @@ const MOCK_APPS = [
 ];
 
 export default function AccessRequestForm() {
+  const { user } = useAuth();
   const [formData, setFormData] = useState({
     application: "",
     justification: "",
   });
   const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("submitting");
+    setError("");
 
-    // Simulate API call
-    setTimeout(() => {
-      setStatus("success");
-    }, 1500);
+    try {
+      const result = await api.submitAccessRequest(user.id, formData.application, formData.justification);
+      if (result.id) {
+        setStatus("success");
+        setFormData({ application: "", justification: "" });
+      } else {
+        setStatus("error");
+        setError("Failed to submit request.");
+      }
+    } catch (err) {
+      console.error("Submission error:", err);
+      setStatus("error");
+      setError("Network error occurred.");
+    }
   };
 
-  const canSubmit = formData.application && formData.justification;
+  const canSubmit = formData.application && formData.justification && user;
 
   return (
     <Box sx={{ maxWidth: 600, mt: 2 }}>
       {status === "success" && (
         <Alert severity="success" sx={{ mb: 3 }}>
           Access request submitted successfully! Pending manager approval.
+        </Alert>
+      )}
+
+      {status === "error" && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
         </Alert>
       )}
 

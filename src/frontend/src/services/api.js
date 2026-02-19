@@ -59,5 +59,37 @@ export const api = {
             headers: getHeaders(),
         });
         return response.json();
+    },
+
+    submitAccessRequest: async (userId, applicationName, justification) => {
+        const response = await fetch(`${API_BASE_URL}/requests`, {
+            method: "POST",
+            headers: getHeaders(),
+            body: JSON.stringify({ userId, applicationName, justification }),
+        });
+        return response.json();
+    },
+
+    getPendingRequests: async () => {
+        const response = await fetch(`${API_BASE_URL}/requests/pending`, {
+            headers: getHeaders(),
+        });
+        return response.json();
+    },
+
+    updateRequestStatus: async (requestId, status) => {
+        const response = await fetch(`${API_BASE_URL}/requests/${requestId}/status`, {
+            method: "PUT",
+            headers: getHeaders(),
+            body: JSON.stringify({ status }),
+        });
+        return response.json();
+    },
+
+    getUserRequests: async (userId) => {
+        const response = await fetch(`${API_BASE_URL}/requests/user/${userId}`, {
+            headers: getHeaders(),
+        });
+        return response.json();
     }
 };

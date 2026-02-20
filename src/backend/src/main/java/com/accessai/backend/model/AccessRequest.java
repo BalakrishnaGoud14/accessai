@@ -33,6 +33,17 @@ public class AccessRequest {
     @Column(nullable = false, length = 2000)
     private String aiExplanation;
 
+    @Column(nullable = true, length = 1000)
+    private String rejectionReason;
+
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private User manager;
+
+    @ManyToOne
+    @JoinColumn(name = "security_admin_id")
+    private User securityAdmin;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status;
@@ -41,14 +52,22 @@ public class AccessRequest {
     private LocalDateTime createdAt;
 
     public enum Status {
-        PENDING, APPROVED, REJECTED
+        PENDING_MANAGER, PENDING_SECURITY, APPROVED, REJECTED;
+
+        // Helper specifically for legacy support if needed, or mapped from frontend
+        // "PENDING"
+        public static Status fromLegacy(String status) {
+            if ("PENDING".equalsIgnoreCase(status))
+                return PENDING_MANAGER;
+            return valueOf(status);
+        }
     }
 
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         if (status == null) {
-            status = Status.PENDING;
+            status = Status.PENDING_MANAGER;
         }
     }
 }

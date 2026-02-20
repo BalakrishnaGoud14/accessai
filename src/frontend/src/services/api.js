@@ -71,23 +71,54 @@ export const api = {
     },
 
     getPendingRequests: async () => {
+        // Default for Managers (PENDING_MANAGER)
         const response = await fetch(`${API_BASE_URL}/requests/pending`, {
             headers: getHeaders(),
         });
         return response.json();
     },
 
-    updateRequestStatus: async (requestId, status) => {
+    getSecurityPendingRequests: async () => {
+        // For Security Admins (PENDING_SECURITY)
+        const response = await fetch(`${API_BASE_URL}/requests/pending-security`, {
+            headers: getHeaders(),
+        });
+        return response.json();
+    },
+
+    updateRequestStatus: async (requestId, status, reviewerRole, reviewerId, rejectionReason) => {
+        const body = { status, reviewerRole, reviewerId };
+        if (rejectionReason) {
+            body.rejectionReason = rejectionReason;
+        }
         const response = await fetch(`${API_BASE_URL}/requests/${requestId}/status`, {
             method: "PUT",
             headers: getHeaders(),
-            body: JSON.stringify({ status }),
+            body: JSON.stringify(body),
         });
         return response.json();
     },
 
     getUserRequests: async (userId) => {
         const response = await fetch(`${API_BASE_URL}/requests/user/${userId}`, {
+            headers: getHeaders(),
+        });
+        return response.json();
+    },
+
+    getAuditLogs: async () => {
+        const response = await fetch(`${API_BASE_URL}/audit-logs`, {
+            headers: getHeaders(),
+        });
+        return response.json();
+    },
+
+    getAllRequests: async (role, userId) => {
+        let url = `${API_BASE_URL}/requests/history`;
+        if (role && userId) {
+            url += `?role=${role}&userId=${userId}`;
+        }
+        const response = await fetch(url, {
             headers: getHeaders(),
         });
         return response.json();

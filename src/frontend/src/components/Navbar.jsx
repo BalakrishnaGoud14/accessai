@@ -20,14 +20,14 @@ import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useRole } from "../context/RoleContext.jsx";
+// import { useRole } from "../context/RoleContext.jsx"; // Removed
 import { useAuth } from "../context/AuthContext.jsx";
 
 const drawerWidth = 240;
 
 export default function Navbar() {
-  const { role } = useRole();
   const { logout, user } = useAuth();
+  const role = user?.role;
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,13 +36,7 @@ export default function Navbar() {
     navigate("/login");
   };
 
-  const items = [
-    {
-      label: "Select Role",
-      icon: <HomeIcon />,
-      path: "/select-role",
-    },
-  ];
+  const items = [];
 
   // Add role-specific menu items
   if (role === "EMPLOYEE") {
@@ -50,6 +44,11 @@ export default function Navbar() {
       label: "Request Access",
       icon: <PersonIcon />,
       path: "/employee",
+    });
+    items.push({
+      label: "My History",
+      icon: <HistoryIcon />,
+      path: "/employee?tab=history",
     });
   }
 
@@ -59,6 +58,11 @@ export default function Navbar() {
       icon: <ApprovalIcon />,
       path: "/manager",
     });
+    items.push({
+      label: "Team History",
+      icon: <HistoryIcon />,
+      path: "/manager?tab=history",
+    });
   }
 
   if (role === "SECURITY_ADMIN") {
@@ -67,6 +71,16 @@ export default function Navbar() {
       icon: <SecurityIcon />,
       path: "/security-admin",
     });
+    items.push({
+      label: "Security History",
+      icon: <HistoryIcon />,
+      path: "/security-admin?tab=history",
+    });
+    items.push({
+      label: "Audit Logs",
+      icon: <AdminPanelSettingsIcon />, // Or HistoryIcon
+      path: "/audit",
+    });
   }
 
   if (role === "ADMIN") {
@@ -74,14 +88,6 @@ export default function Navbar() {
       label: "Role Management",
       icon: <AdminPanelSettingsIcon />,
       path: "/admin/roles",
-    });
-  }
-
-  if (role) {
-    items.push({
-      label: "Audit Logs",
-      icon: <HistoryIcon />,
-      path: "/audit",
     });
   }
 
@@ -129,7 +135,7 @@ export default function Navbar() {
           {items.map((item) => (
             <ListItemButton
               key={item.path}
-              selected={location.pathname === item.path}
+              selected={location.pathname + location.search === item.path}
               onClick={() => navigate(item.path)}
               sx={{
                 "&.Mui-selected": {

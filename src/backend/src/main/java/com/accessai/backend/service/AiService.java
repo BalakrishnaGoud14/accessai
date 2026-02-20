@@ -1,10 +1,14 @@
 package com.accessai.backend.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AiService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AiService.class);
 
     private final ChatClient chatClient;
 
@@ -14,18 +18,23 @@ public class AiService {
 
     public String generateDescription(String prompt) {
         try {
-            return chatClient.prompt()
+            logger.debug("Generating AI description for prompt: {}",
+                    prompt.substring(0, Math.min(prompt.length(), 50)) + "...");
+            String response = chatClient.prompt()
                     .user(prompt)
                     .call()
                     .content();
+            logger.debug("AI response received");
+            return response;
         } catch (Exception e) {
-            System.err.println("Error generating description: " + e.getMessage());
-            e.printStackTrace();
-            throw e;
+            logger.error("Error generating AI description: {}", e.getMessage());
+            // Fallback to avoid 500 error
+            return "AI Description unavailable at this time. (Check API Key)";
         }
     }
 
     public String generateRoleDescription(String roleName) {
+        logger.info("Generating role description for: {}", roleName);
         String prompt = "Provide a concise, professional description for the job role: " + roleName
                 + ". Keep it under 50 words.";
         return generateDescription(prompt);
@@ -33,6 +42,7 @@ public class AiService {
 
     public AnalysisResult analyzeAccessRequest(String userName, String userRole, String department, String application,
             String justification) {
+        logger.info("Analyzing access request for user: {}, App: {}", userName, application);
         String prompt = String.format(
                 "Analyze the following access request and provide a risk assessment:\n" +
                         "User: %s (Role: %s, Department: %s)\n" +
@@ -56,6 +66,8 @@ public class AiService {
         String explanation = response.contains("Explanation:")
                 ? response.substring(response.indexOf("Explanation:") + 12).trim()
                 : response;
+
+        logger.info("Analysis complete. Risk: {}", riskLevel);
 
         return new AnalysisResult(riskLevel, explanation);
     }

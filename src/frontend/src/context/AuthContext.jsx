@@ -8,6 +8,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   // Check if user is already logged in (from localStorage)
   useEffect(() => {
@@ -16,6 +17,7 @@ export function AuthProvider({ children }) {
       setUser(JSON.parse(storedUser));
       setIsAuthenticated(true);
     }
+    setLoading(false);
   }, []);
 
   const login = async (email, password) => {
@@ -25,7 +27,7 @@ export function AuthProvider({ children }) {
         setUser(data.user); // Assuming backend returns user object structure matching frontend
         setIsAuthenticated(true);
         localStorage.setItem("accessai_user", JSON.stringify(data.user));
-        return { success: true };
+        return { success: true, user: data.user };
       } else {
         return { success: false, error: data.error || "Login failed" };
       }
@@ -56,7 +58,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, register, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, register, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

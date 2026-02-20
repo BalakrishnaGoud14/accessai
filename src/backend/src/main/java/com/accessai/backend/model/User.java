@@ -19,6 +19,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
 
@@ -34,7 +35,7 @@ public class User {
 
     @Column(name = "joined_date")
     private String joinedDate;
-    
+
     public enum Role {
         EMPLOYEE, MANAGER, SECURITY_ADMIN, ADMIN
     }

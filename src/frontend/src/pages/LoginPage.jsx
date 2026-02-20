@@ -38,7 +38,16 @@ export default function LoginPage() {
     e.preventDefault();
     const result = await login(formData.email, formData.password);
     if (result.success) {
-      navigate("/select-role");
+      const role = result.user.role;
+      if (role === "ADMIN") {
+        navigate("/admin/roles");
+      } else if (role === "MANAGER") {
+        navigate("/manager");
+      } else if (role === "SECURITY_ADMIN") {
+        navigate("/security-admin");
+      } else {
+        navigate("/employee");
+      }
     } else {
       setError(result.error);
     }

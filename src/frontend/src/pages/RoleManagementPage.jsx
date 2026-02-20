@@ -230,7 +230,7 @@ export default function RoleManagementPage() {
             <TableBody>
               {filteredUsers.map((user, index) => {
                 const pendingRole = roleChanges[user.id];
-                const displayRole = pendingRole || user.currentRole;
+                const displayRole = pendingRole || user.role || "";
 
                 return (
                   <TableRow

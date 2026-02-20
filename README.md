@@ -2,7 +2,6 @@
 
 An intelligent access management platform that uses **AI** to analyze employee access requests, assess security risks, and provide actionable recommendations to managers and admins.
 
-### 🔗 Live Demo: [https://accessai-eight.vercel.app](https://accessai-eight.vercel.app)
 
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4-brightgreen?logo=springboot)
 ![React](https://img.shields.io/badge/React-18-blue?logo=react)

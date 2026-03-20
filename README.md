@@ -10,7 +10,7 @@ An intelligent access management platform that uses **AI** to analyze employee a
 
 ---
 
-🔗 Live Demo: https://lnkd.in/gC9yJKnC
+🔗 Live Demo: https://accessai-eight.vercel.app/register
 
 ## ✨ Features
 

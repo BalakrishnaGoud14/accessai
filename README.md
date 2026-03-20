@@ -12,8 +12,7 @@ An intelligent access management platform that uses **AI** to analyze employee a
 
 🔗 Live Demo: https://accessai-eight.vercel.app/register
 
-⚠️ Note: The website may spin down due to free hosting.
-If you’d like to see it live, feel free to DM me on Linkedin(https://www.linkedin.com/in/balakrishna-goud-malela-224a2b200/) — I’ll bring it back up 😊
+⚠️ **Note:** The website may spin down due to free hosting. If you'd like to see it live, feel free to DM me on [LinkedIn](https://www.linkedin.com/in/balakrishna-goud-malela-224a2b200/) — I'll bring it back up 😊
 
 ## ✨ Features
 

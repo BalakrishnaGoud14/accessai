@@ -10,6 +10,8 @@ An intelligent access management platform that uses **AI** to analyze employee a
 
 ---
 
+🔗 Live Demo: https://lnkd.in/gC9yJKnC
+
 ## ✨ Features
 
 ### 🧑‍💼 Employee Portal
